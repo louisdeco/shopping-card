@@ -78,6 +78,79 @@ describe('api', () => {
 
             await expect(fetchResource('PRODUCTS')).rejects.toThrow('Unexpected token < in JSON')
         });
+
+        it('should respect default timeout', async () => {
+            vi.mocked(fetch).mockImplementation((url, options) => {
+                return new Promise((resolve, reject) => {
+                    if (options?.signal) {
+                        options.signal.addEventListener('abort', () => {
+                            reject(new DOMException('The operation was aborted', 'AbortError'));
+                        })
+                    }
+                })
+            });
+
+            const promise = fetchResource('PRODUCTS');
+            const expectation = expect(promise).rejects.toThrow('The operation was aborted');
+            await vi.advanceTimersByTimeAsync(5001);
+            await expectation;
+        });
+
+        it('should respect custom timeout', async () => {
+            vi.mocked(fetch).mockImplementation((url, options) => {
+                return new Promise((resolve, reject) => {
+                    if (options?.signal) {
+                        options.signal.addEventListener('abort', () => {
+                            reject(new DOMException('The operation was aborted', 'AbortError'));
+                        })
+                    }
+                })
+            });
+
+            const promise = fetchResource('PRODUCTS', { timeout: 2000 });
+            const expectation = expect(promise).rejects.toThrow();
+
+            await vi.advanceTimersByTimeAsync(2001);
+            await expectation;
+        });
+
+        it('should use external signal when provided', async () => {
+            let capturedSignal;
+            const externalController = new AbortController();
+            vi.mocked(fetch).mockImplementation((url, options) => {
+                capturedSignal = options.signal;
+                return new Promise((resolve, reject) => {
+                    resolve({
+                        ok: true,
+                        json: vi.fn().mockResolvedValue({})
+                    });
+                });
+            });
+
+            await fetchResource('PRODUCTS', { signal: externalController.signal });
+            
+            // It should be a different signal, a mixed
+            expect(capturedSignal).not.toBe(externalController.signal);
+            expect(capturedSignal).toBeInstanceOf(AbortSignal);
+        });
+
+        it('should cancel request when external signal is aborted', async () => {
+            const externalController = new AbortController;
+
+            vi.mocked(fetch).mockImplementation((url, options) => {
+                return new Promise((resolve, reject) => {
+                    if (options?.signal) {
+                        options.signal.addEventListener('abort', () => {
+                            reject(new DOMException('The operation was aborted', 'AbortError'));
+                        });
+                    }
+                });
+            });
+
+            const promise = fetchResource('PRODUCTS', { signal: externalController.signal });
+            externalController.abort();
+            await expect(promise).rejects.toThrow('The operation was aborted')
+        });
     });
 
     describe('withRetry', () => {

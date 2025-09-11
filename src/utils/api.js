@@ -1,3 +1,4 @@
+import { Cpu } from 'lucide-react';
 import { API_BASE_URL, ENDPOINTS } from '../constants';
 
 /**
@@ -6,13 +7,17 @@ import { API_BASE_URL, ENDPOINTS } from '../constants';
  * @returns  {Promise<Object>} - API response data
  * @throws {Error} - HTTP errors or timeout (5s)
  */
-async function fetchResource(endpointKey) {
+async function fetchResource(endpointKey, options = {}) {
+    // External signal
+    const { signal: externalSignal, timeout = 5000, ...fetchOptions } = options;
     // Timeout 
     const timeoutController = new AbortController();
-    const timeoutId = setTimeout(() => timeoutController.abort(), 5000);
+    const timeoutId = setTimeout(() => timeoutController.abort(), timeout);
+    // Combined signal
+    const combinedSignal = externalSignal ? AbortSignal.any([externalSignal, timeoutController.signal]) : timeoutController.signal;
 
     try {
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS[endpointKey]}`, { signal: timeoutController.signal });
+        const response = await fetch(`${API_BASE_URL}${ENDPOINTS[endpointKey]}`, { signal: combinedSignal });
         // Check for HTTP errors
         if (!response.ok) {
             const errorText = await response.text();
