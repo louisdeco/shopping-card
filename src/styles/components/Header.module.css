@@ -13,6 +13,11 @@
 
 .navLink {
     padding: 0.6rem 0.8rem;
+    font-weight: 300;
+}
+
+.activeNavLink {
+    font-weight: 500;
 }
 
 .logo {

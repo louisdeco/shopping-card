@@ -1,5 +1,5 @@
 import Flag from 'react-world-flags';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import styles from '../styles/components/Header.module.css';
 import { CircleUser, Heart, ShoppingBasket } from 'lucide-react';
 
@@ -7,9 +7,9 @@ function Header() {
     return (
         <header className={styles.header}>
             <nav className={styles.navigation}>
-                <Link className={styles.navLink} to="/shopping/women">Womenswear</Link>
-                <Link className={styles.navLink} to="/shopping/men">Menswear</Link>
-                <Link className={styles.navLink} to="/shopping/kids">Kidswear</Link>
+                <NavLink className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeNavLink : ''}`} to="/shopping/women">Womenswear</NavLink>
+                <NavLink className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeNavLink : ''}`} to="/shopping/men">Menswear</NavLink>
+                <NavLink className={({ isActive }) => `${styles.navLink} ${isActive ? styles.activeNavLink : ''}`} to="/shopping/kids">Kidswear</NavLink>
             </nav>
             <Link className={styles.logoLink}>
                 <h1 className={styles.logo}>FAKEFETCH</h1>
