@@ -1,0 +1,7 @@
+.articleGrid {
+    padding: 0.5rem 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4rem;
+    width: 100%;
+}

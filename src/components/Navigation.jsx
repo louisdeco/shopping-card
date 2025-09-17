@@ -10,12 +10,30 @@ function Navigation() {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const types = [... new Set(data?.data.filter(item => item.category === category).map(item => item.type))] || [];
-    // const bigProm = data?.data.filter(item => ((item.price - item.discountedPrice) / item.price) > 0.1);
 
     const selectedType = searchParams.get('type');
 
     function handleTypeSelect(type) {
-        setSearchParams({ type })
+        setSearchParams(prev => {
+            const newParams = new URLSearchParams(prev);
+            newParams.set('type', type);
+            return newParams
+        });
+    }
+
+    function handleSearch(e) {
+        const searchValue = e.target.value;
+
+        setSearchParams(prev => {
+            const newParams = new URLSearchParams(prev);
+
+            if(searchValue.trim()) {
+                newParams.set('search', searchValue);
+            } else {
+                newParams.delete('search')
+            }
+            return newParams;
+        })
     }
 
     return (
@@ -28,9 +46,8 @@ function Navigation() {
             }
             <div className={styles.searchContainer}>
                 <Search></Search>
-                <input type="text" placeholder='What are you looking for?' />
+                <input type="text" placeholder='What are you looking for?' onChange={handleSearch}/>
             </div>
-
         </nav>
     )
 }
