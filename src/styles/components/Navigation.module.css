@@ -1,0 +1,47 @@
+.navigation {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 2rem;
+}
+
+.activeNavLink {
+    font-weight: 500;
+}
+
+.filterButton {
+    padding: 0.6rem 0.8rem;
+    width: auto;
+    font-weight: 300;
+    color: inherit;
+}
+
+.activeFilterButton {
+    font-weight: 500;
+}
+
+.navigation:hover {
+    color: #696969;
+}
+
+.filterButton:hover {
+    background-color: transparent;
+    color: black;
+}
+
+.navigation:hover
+.activeFilterButton {
+    font-weight: 300;
+}
+
+.searchContainer {
+    display: flex;
+    gap: 1rem;
+    border-bottom: 1px solid #696969;
+    margin-left: auto;
+    padding: 5px;
+    color: #696969;
+}
+
+input {
+    border: none;
+}
