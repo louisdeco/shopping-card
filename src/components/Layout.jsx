@@ -1,13 +1,15 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from '../styles/components/Layout.module.css';
 import Header from '../components/Header';
 import Navigation from '../components/Navigation';
 
 function Layout() {
+    const location = useLocation();
+    const showNavigation = location.pathname.startsWith('/shopping');
     return (
         <div className={styles.layout}>
             <Header />
-            <Navigation />
+            { showNavigation && <Navigation /> }
             <main>
                 <Outlet />
             </main>
