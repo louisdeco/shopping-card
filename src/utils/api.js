@@ -17,7 +17,7 @@ async function fetchResource(endpointKey, options = {}) {
     const combinedSignal = externalSignal ? AbortSignal.any([externalSignal, timeoutController.signal]) : timeoutController.signal;
 
     try {
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS[endpointKey]}`, { signal: combinedSignal });
+        const response = await fetch(`${API_BASE_URL}${ENDPOINTS[endpointKey]}/?page=1&perPage=30`, { signal: combinedSignal });
         // Check for HTTP errors
         if (!response.ok) {
             const errorText = await response.text();
