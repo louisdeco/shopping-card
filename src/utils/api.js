@@ -1,4 +1,3 @@
-import { Cpu } from 'lucide-react';
 import { API_BASE_URL, ENDPOINTS } from '../constants';
 
 /**
@@ -7,7 +6,7 @@ import { API_BASE_URL, ENDPOINTS } from '../constants';
  * @returns  {Promise<Object>} - API response data
  * @throws {Error} - HTTP errors or timeout (5s)
  */
-async function fetchResource(endpointKey, options = {}) {
+async function baseFetch(url, options = {}) {
     // External signal
     const { signal: externalSignal, timeout = 5000, ...fetchOptions } = options;
     // Timeout 
@@ -17,7 +16,7 @@ async function fetchResource(endpointKey, options = {}) {
     const combinedSignal = externalSignal ? AbortSignal.any([externalSignal, timeoutController.signal]) : timeoutController.signal;
 
     try {
-        const response = await fetch(`${API_BASE_URL}${ENDPOINTS[endpointKey]}/?page=1&perPage=30`, { signal: combinedSignal });
+        const response = await fetch(url, { signal: combinedSignal });
         // Check for HTTP errors
         if (!response.ok) {
             const errorText = await response.text();
@@ -31,6 +30,29 @@ async function fetchResource(endpointKey, options = {}) {
         // Clear timeout
         clearTimeout(timeoutId);
     }
+}
+
+/**
+ * Fetch single resource by ID (e.g., specific product)
+ * @param {string} endpointKey - Valid endpoint key (e.g. 'PRODUCTS')
+ * @param {string} resourceId - The ID of the resource to fetch
+ * @param {Object} options - Fetch options
+ * @returns {Promise<Object>} - Single resource data
+ */
+async function fetchSingleResource(endpointKey, resourceId, options = {}) {
+    const url = `${API_BASE_URL}${ENDPOINTS[endpointKey]}/${resourceId}`;
+    return baseFetch(url, options);
+}
+
+/**
+ * Fetch collection of resource (e.g., all products, categories)
+ * @param {*} endpointKey - Valid endpoint key (e.g. 'PRODUCTS')
+ * @param {*} options - Fetch options
+ * @returns {Promise<Object>} - Collection data
+ */
+async function fetchResource(endpointKey, options = {}) {
+    const url = `${API_BASE_URL}${ENDPOINTS[endpointKey]}/?page=1&perPage=30`;
+    return baseFetch(url, options);
 }
 
 /**
@@ -74,5 +96,7 @@ function withRetry(fetchFn, retries = 2, delay = 500) {
     }
 }
 
-export { fetchResource, withErrorHandling, withRetry };
+// Export base functions
+export { fetchSingleResource, fetchResource, baseFetch, withErrorHandling, withRetry };
 export const safeFetchWithRetry = withErrorHandling(withRetry(fetchResource));
+export const safeFetchSingleResourceWithRetry = withErrorHandling(withRetry(fetchSingleResource));

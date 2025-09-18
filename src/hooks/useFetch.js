@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react';
-import { safeFetchWithRetry } from '../utils/api';
+import { safeFetchWithRetry, safeFetchSingleResourceWithRetry } from '../utils/api';
 
 /**
  * Custom hook for fetching data from API endpoints
  * @param {string} endpointKey - the endpoint key to fetch from
+ * @param {string|null} resourceId - Optional ID for single resource fetching
  * @returns {{data: any, error: string|null, loading: boolean}}
+ * 
+ * Usage examples:
+ * - useFetch('PRODUCTS') // Get all products
+ * - useFetch('PRODUCTS', productId) // Get single product
  */
-function useFetch(endpointKey) {
+function useFetch(endpointKey, resourceId = null) {
     const [data, setData] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true)
@@ -23,7 +28,13 @@ function useFetch(endpointKey) {
         const fetchData = async () => {
 
             try {
-                const result = await safeFetchWithRetry(endpointKey, { signal: controller.signal });
+                let result;
+
+                if (resourceId) {
+                    result = await safeFetchSingleResourceWithRetry(endpointKey, resourceId, { signal: controller.signal });
+                } else {
+                    result = await safeFetchWithRetry(endpointKey, { signal: controller.signal });
+                }
 
                 if (!controller.signal.aborted) {
                     if (result.success === false) {

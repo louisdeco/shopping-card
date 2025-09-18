@@ -1,5 +1,5 @@
 import { describe, vi, it, expect, beforeEach, afterEach } from 'vitest';
-import { fetchResource, withErrorHandling, withRetry } from './api';
+import { baseFetch, fetchResource, fetchSingleResource, withErrorHandling, withRetry } from './api';
 
 // Constants
 vi.mock('../constants', () => ({
@@ -23,7 +23,7 @@ describe('api', () => {
         vi.useRealTimers();
     })
 
-    describe('fetchResource', () => {
+    describe('baseFetch', () => {
 
         it('should fetch and return data successfully', async () => {
             // Set up data returned by fetch
@@ -33,7 +33,7 @@ describe('api', () => {
                 json: vi.fn().mockResolvedValue(mockData)
             });
 
-            const result = await fetchResource('PRODUCTS');
+            const result = await baseFetch('https://api.test.com/products');
 
             expect(fetch).toHaveBeenCalledTimes(1);
             expect(fetch).toHaveBeenCalledWith('https://api.test.com/products', { signal: expect.any(AbortSignal) });
@@ -46,7 +46,7 @@ describe('api', () => {
                 json: vi.fn().mockResolvedValue({})
             });
 
-            const result = await fetchResource('CATEGORIES');
+            const result = await baseFetch('https://api.test.com/products');
 
             expect(fetch).toHaveBeenCalledWith(
                 expect.any(String),
@@ -62,12 +62,12 @@ describe('api', () => {
                 text: vi.fn().mockResolvedValue('Not Found')
             });
             // expect(asyncFn).reject: "wait for this Promise to reject, then test the rejection"
-            await expect(fetchResource('CATEGORIES')).rejects.toThrow('HTTP 404: Not Found');
+            await expect(baseFetch('https://api.test.com/products')).rejects.toThrow('HTTP 404: Not Found');
         });
 
         it('should handle network errors', async () => {
             vi.mocked(fetch).mockRejectedValue(new Error('Network error'));
-            await expect(fetchResource('PRODUCTS')).rejects.toThrow('Network error');
+            await expect(baseFetch('https://api.test.com/products')).rejects.toThrow('Network error');
         });
 
         it('should throw when response is not valid JSON', async() => {
@@ -76,7 +76,7 @@ describe('api', () => {
                 json: vi.fn().mockRejectedValue(new SyntaxError('Unexpected token < in JSON'))
             });
 
-            await expect(fetchResource('PRODUCTS')).rejects.toThrow('Unexpected token < in JSON')
+            await expect(baseFetch('https://api.test.com/products')).rejects.toThrow('Unexpected token < in JSON')
         });
 
         it('should respect default timeout', async () => {
@@ -90,7 +90,7 @@ describe('api', () => {
                 })
             });
 
-            const promise = fetchResource('PRODUCTS');
+            const promise = baseFetch('https://api.test.com/products');
             const expectation = expect(promise).rejects.toThrow('The operation was aborted');
             await vi.advanceTimersByTimeAsync(5001);
             await expectation;
@@ -107,7 +107,7 @@ describe('api', () => {
                 })
             });
 
-            const promise = fetchResource('PRODUCTS', { timeout: 2000 });
+            const promise = baseFetch('https://api.test.com/products', { timeout: 2000 });
             const expectation = expect(promise).rejects.toThrow();
 
             await vi.advanceTimersByTimeAsync(2001);
@@ -127,7 +127,7 @@ describe('api', () => {
                 });
             });
 
-            await fetchResource('PRODUCTS', { signal: externalController.signal });
+            await baseFetch('https://api.test.com/products', { signal: externalController.signal });
             
             // It should be a different signal, a mixed
             expect(capturedSignal).not.toBe(externalController.signal);
@@ -147,11 +147,37 @@ describe('api', () => {
                 });
             });
 
-            const promise = fetchResource('PRODUCTS', { signal: externalController.signal });
+            const promise = baseFetch('https://api.test.com/products', { signal: externalController.signal });
             externalController.abort();
             await expect(promise).rejects.toThrow('The operation was aborted')
         });
     });
+
+    describe('fetchResource', () => {
+        it('should construct correct URL for collection endpoint', async () => {
+            vi.mocked(fetch).mockResolvedValue({
+                ok: true,
+                json: vi.fn().mockResolvedValue({ data: [] })
+            });
+
+            await fetchResource('PRODUCTS');
+
+            expect(fetch).toHaveBeenCalledWith('https://api.test.com/products/?page=1&perPage=30', { signal: expect.any(AbortSignal) })
+        });
+    });
+
+    describe('fetchSingleResource', () => {
+        it('should construct correct URL for collection endpoint', async () => {
+            vi.mocked(fetch).mockResolvedValue({
+                ok: true,
+                json: vi.fn().mockResolvedValue({ data: [] })
+            });
+
+            await fetchSingleResource('PRODUCTS', '1');
+
+            expect(fetch).toHaveBeenCalledWith('https://api.test.com/products/1', { signal: expect.any(AbortSignal) })
+        });
+    })
 
     describe('withRetry', () => {
         let mockAsyncFn;
