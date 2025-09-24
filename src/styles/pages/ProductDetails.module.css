@@ -1,0 +1,97 @@
+.productDetails {
+    display: flex;
+    padding: 0.5rem 2.5rem;
+    flex-grow: 1;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+}
+
+.productImage {
+    height: 70vh;
+    width: 35vw;
+    object-fit: cover;
+    object-position: center;
+}
+
+.brandWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    font-size: 1.5rem;
+    width: 25vw;
+    height: 70vh;
+    justify-content: flex-start;
+}
+
+.productTitle {
+    font-weight: 300;
+}
+
+.userInteractions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sizeDropdown {
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1px black solid;
+    border-radius: 0.5rem;
+    flex-grow: 1;
+}
+
+.sizeDropdown:invalid {
+    font-size: 1rem;
+    color: grey;
+}
+
+.sizeDropdown:valid {
+    font-size: 1rem;
+    color: black;
+    font-weight: 500;
+}
+
+.interactionButtons {
+    display: flex;
+    gap: 1rem;
+}
+
+button {
+    width: auto;
+    padding: 0.3rem 1rem;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.addButton {
+    background-color: black;
+    color: white;
+    flex-grow: 1;
+}
+
+.addButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.wishlistButton {
+    display: flex;
+    gap: 0.5rem;
+    border: 1px solid black;
+}
+
+.wishlistButton:hover {
+    background-color: transparent;
+}
+
+.wishlistButton:hover
+.wishlistHeart {
+    fill: black;
+}
