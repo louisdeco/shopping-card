@@ -3,6 +3,7 @@ import ErrorPage from './pages/ErrorPage';
 import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
+import ProductDetails from './pages/ProductDetails';
 
 export const routes = [
     {
@@ -17,6 +18,10 @@ export const routes = [
             {
                 path: 'shopping/:category',
                 element: <Shop />
+            },
+            {
+                path: 'product/:id',
+                element: <ProductDetails />
             },
             {
                 path:'*',

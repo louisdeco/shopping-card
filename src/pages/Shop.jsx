@@ -33,6 +33,7 @@ function Shop() {
                             price={item.price}
                             image={item.image}
                             brand={item.brand}
+                            id={item._id}
                         />
                     })
                 }
