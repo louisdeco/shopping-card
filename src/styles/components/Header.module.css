@@ -58,3 +58,24 @@ button:hover,
     overflow: hidden;
     object-fit: cover; 
 }
+
+.cartLink {
+    position: relative;
+}
+
+.cartBadge {
+    position: absolute;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    font-weight: 600;
+    bottom: 10px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid white;
+}
