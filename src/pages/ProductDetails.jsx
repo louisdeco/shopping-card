@@ -19,7 +19,8 @@ function ProductDetails() {
             type: 'added',
             id: id,
             size: selectedSize,
-            quantity: 1
+            quantity: 1,
+            price: data.price
         })
     }
 

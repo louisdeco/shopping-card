@@ -8,7 +8,8 @@ export function cartReducer(state, action) {
                 ...state, {
                     id: action.id,
                     size: action.size,
-                    quantity: action.quantity
+                    quantity: action.quantity,
+                    price: action.price
                 }
             ];
         }
