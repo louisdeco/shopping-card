@@ -6,7 +6,7 @@ import { useCart } from '../contexts/CartContext';
 
 function Header() {
     const cart = useCart();
-    const cartItemCount = cart.length;
+    const cartItemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
     return (
         <header className={styles.header}>
@@ -28,7 +28,7 @@ function Header() {
                 <Link className={styles.actionLink} aria-label="Favorites">
                     <Heart size={20}></Heart>
                 </Link>
-                <Link className={`${styles.actionLink} ${styles.cartLink}`} aria-label="Shopping cart">
+                <Link to="/cart" className={`${styles.actionLink} ${styles.cartLink}`} aria-label="Shopping cart">
                     <ShoppingBasket size={20}></ShoppingBasket>
                     {cartItemCount > 0 && (
                         <span className={styles.cartBadge}>{cartItemCount}</span>
