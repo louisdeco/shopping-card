@@ -4,6 +4,7 @@ import NotFound from './pages/NotFound';
 import Home from './pages/Home';
 import Shop from './pages/Shop';
 import ProductDetails from './pages/ProductDetails';
+import Cart from './pages/Cart';
 
 export const routes = [
     {
@@ -22,6 +23,10 @@ export const routes = [
             {
                 path: 'product/:id',
                 element: <ProductDetails />
+            },
+            {
+                path: 'cart',
+                element: <Cart />
             },
             {
                 path:'*',

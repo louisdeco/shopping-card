@@ -1,0 +1,61 @@
+.cart {
+    padding: 0.5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex-grow: 1;
+}
+
+.pageTitle {
+    font-weight: 400;
+    padding: 2rem 0;
+}
+
+.cartInfo {
+    display: flex;
+    gap: 2rem;
+}
+
+.summary {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1;
+}
+
+.summaryInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.lineItem {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 300;
+}
+
+.title {
+    font-weight: 400;
+    padding: 0;
+}
+
+.totalInfo {
+    border-top: 1px solid grey;
+    padding-top: 1rem;
+    font-weight: 500;
+}
+
+.checkoutButton {
+    background-color: black;
+    color: white;
+}
+
+.checkoutButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.emptyMessage {
+    font-weight: 400;
+    text-align: center;
+}

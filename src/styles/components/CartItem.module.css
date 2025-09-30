@@ -1,0 +1,67 @@
+.cartItem {
+    display: flex;
+    gap: 6rem;
+    padding: 1rem 2rem;
+    border-top: 1px solid grey;
+    justify-content: space-between;
+}
+
+.productImage {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.productType {
+    font-weight: 200;
+}
+
+.productInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem
+}
+
+.brandTitle {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand {
+    font-weight: 700;
+}
+
+.title {
+    font-weight: 300;
+}
+
+.pricing {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.taxInfo {
+    font-weight: 200;
+}
+
+.sizeInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sizeLabel {
+    font-weight: 200;
+}
+
+.quantityInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.quantityLabel {
+    font-weight: 200;
+}
